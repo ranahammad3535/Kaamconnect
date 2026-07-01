@@ -1,0 +1,28 @@
+name: Daily MongoDB Backup
+
+on:
+  schedule:
+    - cron: '0 21 * * *'
+  workflow_dispatch:
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install MongoDB Database Tools
+        run: |
+          wget -q https://fastdl.mongodb.org/tools/db/mongodb-database-tools-ubuntu2204-x86_64-100.9.4.deb
+          sudo apt install ./mongodb-database-tools-ubuntu2204-x86_64-100.9.4.deb
+
+      - name: Run mongodump
+        run: |
+          mkdir -p backup
+          mongodump --uri="${{ secrets.MONGODB_URI }}" --out=backup/
+          tar -czvf backup-$(date +%Y-%m-%d).tar.gz backup/
+
+      - name: Upload backup as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: kaamconnect-backup-${{ github.run_id }}
+          path: backup-*.tar.gz
+          retention-days: 30
