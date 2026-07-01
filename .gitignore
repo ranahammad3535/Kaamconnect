@@ -1,0 +1,14 @@
+# Dependencies (we reinstall these with npm install)
+node_modules/
+
+# Secret keys — NEVER upload this file to GitHub
+.env
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
