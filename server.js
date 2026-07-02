@@ -31,6 +31,7 @@ const uploadRoutes = require('./routes/uploadRoutes');
 
 // Create the Express application
 const app = express();
+app.set('trust proxy', 1);
 
 // Read port from .env, or use 5000 if not set
 const PORT = process.env.PORT || 5000;
